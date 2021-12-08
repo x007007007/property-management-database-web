@@ -1,22 +1,17 @@
 <template>
   <q-page class="row items-center justify-evenly">
-    <example-component
-      title="Example component"
-      active
-      :todos="todos"
-      :meta="meta"
-    ></example-component>
+    <camera></camera>
   </q-page>
 </template>
 
 <script lang="ts">
 import { Todo, Meta } from 'components/models';
-import ExampleComponent from 'components/CompositionComponent.vue';
 import { defineComponent, ref } from 'vue';
+import Camera from 'components/Camera.vue';
 
 export default defineComponent({
   name: 'PageIndex',
-  components: { ExampleComponent },
+  components: { Camera },
   setup() {
     const todos = ref<Todo[]>([
       {
