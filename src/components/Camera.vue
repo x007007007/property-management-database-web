@@ -16,6 +16,10 @@
       >Video stream not available.</video>
     </div>
     <button @click="capture">open video</button>
+    <button @click="stopPlay">||</button>
+    <button @click="startPlay">&gt;</button>
+    <button @click="closeStream">close video</button>
+
   </div>
 </template>
 
@@ -27,15 +31,20 @@ export default defineComponent({
   data () {
     let selectDevice: MediaDeviceInfo|null = null
     let devices: MediaDeviceInfo[] = []
+    let stream: MediaStream|null = null
     return {
       width: 320,
       height: 0,
       is_streaming: false,
+      stream,
       selectDevice,
       devices,
     }
   },
   methods: {
+    getVideoDom () {
+      return document.querySelector<HTMLVideoElement>('#video')
+    },
     async refreshDevice () {
       if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) {
         console.log('enumerateDevices() not supported.');
@@ -56,7 +65,7 @@ export default defineComponent({
           return x
       })
     },
-    async capture () {
+    async getSelectedStream ()  {
       let constraints: MediaStreamConstraints = {
         audio: false,
         video: false,
@@ -67,14 +76,40 @@ export default defineComponent({
         constraints.video = true
       }
       const stream = await navigator.mediaDevices.getUserMedia(constraints)
-      const videoDom = document.querySelector<HTMLVideoElement>('#video')
+      return stream
+    },
+    async capture () {
+      const stream = await this.getSelectedStream()
+      const videoDom = this.getVideoDom()
       if ( videoDom ) {
         videoDom.srcObject = stream
         await videoDom.play()
       }
     },
+    stopPlay() {
+      const videoDom = this.getVideoDom()
+      if ( videoDom ) {
+        videoDom.pause()
+      }
+    },
+    async startPlay() {
+      const videoDom = this.getVideoDom()
+      if ( videoDom ) {
+        await videoDom.play()
+      }
+    },
+    closeStream () {
+      this.stopPlay()
+      const videoDom = this.getVideoDom()
+      if ( videoDom && videoDom.srcObject) {
+        (videoDom.srcObject as MediaStream).getTracks().forEach(function(track) {
+          track.stop();
+        });
+        videoDom.srcObject = null
+      }
+    },
     videoCanPlayCallback() {
-      let videoDom = document.querySelector<HTMLVideoElement>('#video')
+      let videoDom = this.getVideoDom()
       if (!this.is_streaming) {
         if (videoDom) {
           this.height = videoDom.videoHeight / (videoDom.videoWidth / this.width)
