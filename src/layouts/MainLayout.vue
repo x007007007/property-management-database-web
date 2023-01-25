@@ -12,10 +12,10 @@
         />
 
         <q-toolbar-title>
-          Quasar App
+          <q-btn to="/" unelevated>PMDB</q-btn>
         </q-toolbar-title>
 
-        <div>Quasar v{{ $q.version }}</div>
+        <div></div>
       </q-toolbar>
     </q-header>
 
@@ -25,18 +25,11 @@
       bordered
     >
       <q-list>
-        <q-item-label
-          header
-        >
-          Essential Links
-        </q-item-label>
-
-        <EssentialLink
-          v-for="link in essentialLinks"
-          :key="link.title"
-          v-bind="link"
-        />
+        <q-item>
+          <LocationNav />
+        </q-item>
       </q-list>
+
     </q-drawer>
 
     <q-page-container>
@@ -47,15 +40,18 @@
 
 <script>
 import { defineComponent, ref } from 'vue'
-import EssentialLink from 'components/EssentialLink.vue'
+import LocationNav from 'components/LocationNav.vue'
 
-const linksList = []
+const linksList = [{
+  title: 'Home',
+  link: '/'
+}]
 
 export default defineComponent({
   name: 'MainLayout',
 
   components: {
-    EssentialLink
+    LocationNav,
   },
 
   setup () {
