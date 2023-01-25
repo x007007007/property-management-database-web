@@ -87,7 +87,10 @@ module.exports = configure(function (ctx) {
       proxy: {
         '/api/': {
           target: 'http://localhost/',
-        }
+        },
+        '/media/': {
+          target: 'http://localhost/',
+        },
       },
       port: 8080,
       open: true // opens browser window automatically

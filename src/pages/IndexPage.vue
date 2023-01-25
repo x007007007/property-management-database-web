@@ -1,10 +1,19 @@
 <template>
   <q-page class="flex">
-    <div v-if="selectLocationHubs">
-      <div v-for="hub in selectLocationHubs" :key="hub.id">
-        name: {{ hub.name }}
-        location: {{ hub.location_detail.path }}
-      </div>
+    <div
+      class="q-pa-md row items-start q-gutter-md"
+      v-if="selectLocationHubs"
+    >
+      <q-card
+        v-for="hub in selectLocationHubs"
+        :key="hub.id"
+        >
+        <q-card-section>
+          <div>location: {{ hub.name }}</div>
+          <div>location: {{ hub.location_detail.path }}</div>
+        </q-card-section>
+        <q-img v-if="hub.image" :src="hub.image"></q-img>
+      </q-card >
     </div>
   </q-page>
 </template>
