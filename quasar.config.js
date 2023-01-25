@@ -86,7 +86,7 @@ module.exports = configure(function (ctx) {
       },
       proxy: {
         '/api/': {
-          target: 'http://localhost:8000/',
+          target: 'http://localhost/',
         }
       },
       port: 8080,

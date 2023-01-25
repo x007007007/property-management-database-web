@@ -2,7 +2,7 @@
   <q-page class="row items-center justify-evenly">
     <input ref="photoInputRef" class="image-input" type="file" accept="image/*" capture="camera" @change="onTakePhoto"/>
     <div v-if="photo" class="col-11">
-      <q-btn-group push>
+      <q-btn-group push v-show="!isUploading">
         <q-btn @click="takePhoto">重拍</q-btn>
         <q-btn @click="submit">提交</q-btn>
       </q-btn-group>
@@ -35,6 +35,7 @@ const photo = ref()
 const photoInputRef = ref()
 const route = useRoute()
 const currentFile = ref()
+const isUploading = ref(false)
 
 const takePhoto = () => {
   photoInputRef.value.click()
@@ -46,17 +47,29 @@ const onTakePhoto = (e) => {
   photo.value = URL.createObjectURL(currentFile.value)
 }
 
+const reset = () => {
+  currentFile.value = null
+  photo.value = ""
+}
 const submit = async (e) => {
   if (currentFile.value) {
-    const code = route.params['code']
-    const fileForm = new FormData
-    fileForm.append('image', currentFile.value, 'photo.png')
-    const res = await axios.post(`/api/v1/hub/${code}/photo/`, fileForm, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      }
-    })
-    console.log(res.data)
+    isUploading.value = true
+    try {
+      const code = route.params['code']
+      const fileForm = new FormData
+      fileForm.append('image', currentFile.value, 'photo.png')
+      const res = await axios.post(`/api/v1/hub/${code}/photo/`, fileForm, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        }
+      })
+      console.log(res.data)
+      reset()
+    } catch (e) {
+      isUploading.value = false
+      window.alert('系统出错，请重试')
+    }
+    isUploading.value = false
   }
 }
 
