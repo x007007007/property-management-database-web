@@ -1,7 +1,16 @@
 <template>
-  <q-layout view="hHh lpR fFf">
+  <q-layout view="lHh Lpr lFf">
     <q-header elevated>
       <q-toolbar>
+        <q-btn
+          flat
+          dense
+          round
+          icon="menu"
+          aria-label="Menu"
+          @click="toggleLeftDrawer"
+        />
+
         <q-toolbar-title>
           <q-btn to="/" unelevated>PMDB</q-btn>
         </q-toolbar-title>
@@ -10,23 +19,28 @@
       </q-toolbar>
     </q-header>
 
+    <q-drawer
+      v-model="leftDrawerOpen"
+      show-if-above
+      bordered
+    >
+      <q-list>
+        <q-item>
+          <LocationNav />
+        </q-item>
+      </q-list>
+
+    </q-drawer>
 
     <q-page-container>
       <router-view />
     </q-page-container>
-
-    <q-footer elevated class="bg-grey-8 text-white">
-      <q-toolbar>
-        <q-toolbar-title>
-        </q-toolbar-title>
-      </q-toolbar>
-    </q-footer>
-
   </q-layout>
 </template>
 
 <script>
 import { defineComponent, ref } from 'vue'
+import LocationNav from 'components/LocationNav.vue'
 
 const linksList = [{
   title: 'Home',
@@ -34,9 +48,10 @@ const linksList = [{
 }]
 
 export default defineComponent({
-  name: 'MainLayout',
+  name: 'LocationLayout',
 
   components: {
+    LocationNav,
   },
 
   setup () {

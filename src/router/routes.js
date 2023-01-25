@@ -2,10 +2,16 @@
 const routes = [
   {
     path: '/',
-    component: () => import('layouts/MainLayout.vue'),
+    component: () => import('layouts/LocationLayout.vue'),
     children: [
       { path: '', component: () => import('pages/IndexPage.vue') },
-      { path: 'hub/:code/update', component: () => import('pages/HubPhoto.vue') }
+    ]
+  },
+  {
+    path: '/hub',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [
+      { path: ':code/update', component: () => import('pages/HubPhoto.vue') }
     ]
   },
   {
